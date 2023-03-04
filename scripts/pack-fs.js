@@ -11,6 +11,7 @@ const FS_BASE = path.join(IMAGE_ROOT, "rootfs-flat");
 const PACK_DIST = path.join(IMAGE_ROOT, "pack-v2");
 
 async function main() {
+  await fs.mkdir(PACK_DIST);
   const result = await fs.readdir(FS_BASE);
   const map = {};
 
@@ -18,7 +19,7 @@ async function main() {
     const prefix = name.substring(0, 2);
     if (!map[prefix]) map[prefix] = [];
 
-    const fileFullName = `${base}/${name}`;
+    const fileFullName = path.join(FS_BASE, name);
     const file = await fs.stat(fileFullName);
     const hash = name.split(".")[0];
 
