@@ -12,7 +12,9 @@ const V86_ROOT = path.join(__dirname, "../node_modules/@woodenfish/libv86");
 const IMAGE_ROOT = path.join(__dirname, "../images", parsed.options.image);
 const OUTPUT_FILE = path.join(IMAGE_ROOT, "state.bin");
 
-process.stdin.setRawMode(true);
+if (process.stdin.isTTY) {
+  process.stdin.setRawMode(true);
+}
 process.stdin.resume();
 process.stdin.setEncoding("utf8");
 process.stdin.on("data", handle_key);
