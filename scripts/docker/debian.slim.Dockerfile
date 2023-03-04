@@ -28,12 +28,12 @@ RUN apt update && \
   systemctl disable apt-daily.timer && \
   systemctl disable apt-daily-upgrade.timer && \
   systemctl disable dhcpcd.service && \
-  echo "tmpfs /tmp tmpfs nodev,nosuid 0 0" >> /etc/fstab && \
-  cd /root/ && \
-  wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh || true && \
+  echo "tmpfs /tmp tmpfs nodev,nosuid 0 0" >> /etc/fstab
+
+RUN apt install -y git ca-certificates && \
+  CHSH=no sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)" || true && \
   echo "DISABLE_AUTO_UPDATE=true" >> ~/.zshrc && \
-  sed  -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="bira"/g'  ~/.zshrc && \
-  chsh -s /bin/zsh
+  sed  -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="bira"/g'  ~/.zshrc
 
 COPY getty-noclear.conf getty-override.conf /etc/systemd/system/getty@tty1.service.d/
 COPY getty-autologin-serial.conf /etc/systemd/system/serial-getty@ttyS0.service.d/
