@@ -13,9 +13,9 @@ jobs:
           node-version: 16
       - name: Build image
         run: |
-          apt update && apt install zstd -y
+          sudo apt update && sudo apt install zstd -y
           yarn
-          cd scripts/docker && ./build-debian-slim.sh && cd ../..
+          cd scripts/docker && ./build-debian-slim.sh && cd ../../
           node ./scripts/build-state.js --image debian-slim
           zstd -9 images/debian-slim/state.bin
           node ./scripts/pack-fs.js --image debian-slim
