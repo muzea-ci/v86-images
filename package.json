@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@woodenfish/libv86": "0.0.2-alpha.7",
+    "cac": "^6.7.14"
+  }
+}

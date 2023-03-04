@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Build image
+        run: |
+          apt update && apt install zstd -y
+          yarn
+          cd scripts/docker && ./build-debian-slim.sh && cd ../..
+          node ./scripts/build-state.js --image debian-slim
+          zstd -9 images/debian-slim/state.bin
+          node ./scripts/pack-fs.js --image debian-slim
+          tar -czf ./images/debian-slim/fs-pack-v2.tar.gz ./images/debian-slim/pack-v2
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            images/debian-slim/state.bin.zst
+            images/debian-slim/fs-pack-v2.tar.gz
