@@ -18,7 +18,7 @@ jobs:
           sudo apt update && sudo apt install zstd -y
           yarn
           cd scripts/docker && ./build-debian-slim.sh && cd ../../
-          node ./scripts/build-state.js --image debian-slim
+          node ./scripts/build-state.js --image debian-slim --shell zsh
           zstd -9 images/debian-slim/state.bin
           node ./scripts/pack-fs.js --image debian-slim
           tar -czf ./images/debian-slim/fs-pack-v2.tar.gz ./images/debian-slim/pack-v2

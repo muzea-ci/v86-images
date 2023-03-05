@@ -6,7 +6,7 @@ const V86 = require("@woodenfish/libv86").V86Starter;
 const cli = require("cac").default();
 
 cli.option("--image <image path>", "Specify a image directory");
-const parsed = cli.parse();
+cli.option("--shell <bash>", "Specify default shell");
 
 const V86_ROOT = path.join(__dirname, "../node_modules/@woodenfish/libv86");
 const IMAGE_ROOT = path.join(__dirname, "../images", parsed.options.image);
@@ -52,6 +52,9 @@ emulator.add_listener("serial0-output-char", function (c) {
     console.error("\nBooted in %d", (Date.now() - boot_start) / 1000);
     booted = true;
 
+    if (parsed.options.shell) {
+      emulator.serial0_send(`chsh -s /bin/${parsed.options.shell} && ${parsed.options.shell}\n`);
+    }
     // sync and drop caches: Makes it safer to change the filesystem as fewer files are rendered
     emulator.serial0_send("sync;echo 3 >/proc/sys/vm/drop_caches\n");
 

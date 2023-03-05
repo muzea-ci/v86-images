@@ -30,10 +30,11 @@ RUN apt update && \
   systemctl disable dhcpcd.service && \
   echo "tmpfs /tmp tmpfs nodev,nosuid 0 0" >> /etc/fstab
 
+RUN echo "export TERM=xterm-256color" >> ~/.bashrc
+
 RUN apt install -y git ca-certificates && \
   CHSH=no sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)" || true && \
-  echo "DISABLE_AUTO_UPDATE=true" >> ~/.zshrc && \
-  sed  -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="bira"/g'  ~/.zshrc
+  echo "DISABLE_AUTO_UPDATE=true" >> ~/.zshrc
 
 COPY getty-noclear.conf getty-override.conf /etc/systemd/system/getty@tty1.service.d/
 COPY getty-autologin-serial.conf /etc/systemd/system/serial-getty@ttyS0.service.d/
