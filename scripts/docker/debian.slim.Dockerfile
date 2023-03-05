@@ -36,7 +36,7 @@ RUN apt install -y git ca-certificates nano && \
   mkdir -p "$HOME/.zsh" && \
   git clone https://github.com/sindresorhus/pure.git "$HOME/.zsh/pure"
 
-RUN curl -sS https://starship.rs/install.sh | sh
+RUN wget https://starship.rs/install.sh && chmod +x ./install.sh && ./install.sh --yes && rm ./install.sh
 
 COPY getty-noclear.conf getty-override.conf /etc/systemd/system/getty@tty1.service.d/
 COPY getty-autologin-serial.conf /etc/systemd/system/serial-getty@ttyS0.service.d/
