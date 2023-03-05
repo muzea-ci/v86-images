@@ -20,6 +20,8 @@ jobs:
           cd scripts/docker && ./build-debian-slim.sh && cd ../../
           node ./scripts/build-state.js --image debian-slim
           zstd -9 images/debian-slim/state.bin
+          node ./scripts/build-state.js --image debian-slim --out state-zsh.bin --shell zsh
+          zstd -9 images/debian-slim/state-zsh.bin
           node ./scripts/pack-fs.js --image debian-slim
           tar -czf ./images/debian-slim/fs-pack-v2.tar.gz ./images/debian-slim/pack-v2
       - name: Release
@@ -28,4 +30,5 @@ jobs:
           name: debian-10-slim
           path: |
             images/debian-slim/state.bin.zst
+            images/debian-slim/state-zsh.bin.zst
             images/debian-slim/fs-pack-v2.tar.gz

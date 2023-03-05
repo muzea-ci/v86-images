@@ -7,12 +7,13 @@ const cli = require("cac").default();
 
 cli.option("--image <image path>", "Specify a image directory");
 cli.option("--shell <bash>", "Specify default shell");
+cli.option("--out <file name>", "Specify output file name");
 
 const parsed = cli.parse();
 
 const V86_ROOT = path.join(__dirname, "../node_modules/@woodenfish/libv86");
 const IMAGE_ROOT = path.join(__dirname, "../images", parsed.options.image);
-const OUTPUT_FILE = path.join(IMAGE_ROOT, "state.bin");
+const OUTPUT_FILE = path.join(IMAGE_ROOT, parsed.options.image || "state.bin");
 
 if (process.stdin.isTTY) {
   process.stdin.setRawMode(true);

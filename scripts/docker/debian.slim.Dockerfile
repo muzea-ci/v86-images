@@ -34,9 +34,10 @@ RUN echo "export TERM=xterm-256color" >> ~/.bashrc
 
 RUN apt install -y git ca-certificates nano && \
   mkdir -p "$HOME/.zsh" && \
-  git clone https://github.com/sindresorhus/pure.git "$HOME/.zsh/pure"
-
-RUN wget https://starship.rs/install.sh && chmod +x ./install.sh && ./install.sh --yes && rm ./install.sh
+  git clone https://github.com/sindresorhus/pure.git "$HOME/.zsh/pure" && \
+  echo "fpath+=($HOME/.zsh/pure)" >> ~/.zshrc && \
+  echo "autoload -U promptinit; promptinit" >> ~/.zshrc && \
+  echo "prompt pure" >> ~/.zshrc
 
 COPY getty-noclear.conf getty-override.conf /etc/systemd/system/getty@tty1.service.d/
 COPY getty-autologin-serial.conf /etc/systemd/system/serial-getty@ttyS0.service.d/
