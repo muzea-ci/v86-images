@@ -13,7 +13,7 @@ const parsed = cli.parse();
 
 const V86_ROOT = path.join(__dirname, "../node_modules/@woodenfish/libv86");
 const IMAGE_ROOT = path.join(__dirname, "../images", parsed.options.image);
-const OUTPUT_FILE = path.join(IMAGE_ROOT, parsed.options.image || "state.bin");
+const OUTPUT_FILE = path.join(IMAGE_ROOT, parsed.options.out || "state.bin");
 
 if (process.stdin.isTTY) {
   process.stdin.setRawMode(true);
