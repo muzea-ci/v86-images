@@ -31,10 +31,11 @@ RUN apt update && \
   echo "tmpfs /tmp tmpfs nodev,nosuid 0 0" >> /etc/fstab
 
 RUN echo "export TERM=xterm-256color" >> ~/.bashrc
+RUN curl -sS https://starship.rs/install.sh | sh
 
-RUN apt install -y git ca-certificates && \
-  CHSH=no sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)" || true && \
-  echo "DISABLE_AUTO_UPDATE=true" >> ~/.zshrc
+RUN apt install -y git ca-certificates nano && \
+  mkdir -p "$HOME/.zsh" && \
+  git clone https://github.com/sindresorhus/pure.git "$HOME/.zsh/pure"
 
 COPY getty-noclear.conf getty-override.conf /etc/systemd/system/getty@tty1.service.d/
 COPY getty-autologin-serial.conf /etc/systemd/system/serial-getty@ttyS0.service.d/
