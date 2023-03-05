@@ -8,6 +8,8 @@ const cli = require("cac").default();
 cli.option("--image <image path>", "Specify a image directory");
 cli.option("--shell <bash>", "Specify default shell");
 
+const parsed = cli.parse();
+
 const V86_ROOT = path.join(__dirname, "../node_modules/@woodenfish/libv86");
 const IMAGE_ROOT = path.join(__dirname, "../images", parsed.options.image);
 const OUTPUT_FILE = path.join(IMAGE_ROOT, "state.bin");
