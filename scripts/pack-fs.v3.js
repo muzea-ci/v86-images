@@ -45,16 +45,15 @@ async function pack() {
     const pack = result[packIndex];
     pack.size += fileInfo.size;
     const fileNameHex = fileName.split(".")[0];
-    pack.list.push(parseInt(fileNameHex.substring(0, 4), 16));
-    pack.list.push(parseInt(fileNameHex.substring(4), 16));
-    // pack.list.push(fileNameHex);
+    pack.list.push(parseInt(fileNameHex, 16));
     pack.list.push(fileInfo.size);
 
     fs.appendFile(path.join(PACK_DIST, `${packIndex.toString(16)}.pack`), await fs.readFile(fileFullName));
   }
 
   // await fs.writeFile(path.join(PACK_DIST, "map.json"), JSON.stringify(result));
-  await fs.writeFile(path.join(PACK_DIST, "map.cbor"), new Uint8Array(cbor.encode(result)));
+  await fs.writeFile(path.join(PACK_DIST, "map.cbor"), new Uint8Array(cbor.encode(result.map((it) => it.list))));
+  await fs.writeFile(path.join(PACK_DIST, "map.json"), JSON.stringify(result.map((it) => it.list)));
   console.log("pack done");
 }
 
