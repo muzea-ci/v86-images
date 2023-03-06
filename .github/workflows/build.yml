@@ -22,8 +22,8 @@ jobs:
           zstd -9 images/debian-slim/state.bin
           node ./scripts/build-state.js --image debian-slim --out state-zsh.bin --shell zsh
           zstd -9 images/debian-slim/state-zsh.bin
-          node ./scripts/pack-fs.js --image debian-slim
-          tar -czf ./images/debian-slim/fs-pack-v2.tar.gz ./images/debian-slim/pack-v2
+          node ./scripts/pack-fs.v3.js --image debian-slim
+          tar -czf ./images/debian-slim/fs-pack-v3.tar.gz ./images/debian-slim/pack-v3
       - name: Release
         uses: actions/upload-artifact@v3
         with:
@@ -31,4 +31,4 @@ jobs:
           path: |
             images/debian-slim/state.bin.zst
             images/debian-slim/state-zsh.bin.zst
-            images/debian-slim/fs-pack-v2.tar.gz
+            images/debian-slim/fs-pack-v3.tar.gz
