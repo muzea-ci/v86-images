@@ -20,4 +20,4 @@ jobs:
         with:
           name: debian-10-hdd
           path: |
-            images/debian-filerr/linux.img.zstd
+            images/debian-filer/linux.img.zstd
