@@ -1,0 +1,23 @@
+name: build-debian-hdd
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Build image
+        run: |
+          sudo apt update && sudo apt install zstd extlinux -y
+          cd scripts/docker && sudo ./build-debian-filer.sh && cd ../../
+      - name: Release
+        uses: actions/upload-artifact@v3
+        with:
+          name: debian-10-hdd
+          path: |
+            images/debian-filerr/linux.img.zstd

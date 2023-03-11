@@ -10,8 +10,8 @@ const IMAGE_ROOT = path.join(__dirname, "../images", parsed.options.image);
 const FS_BASE = path.join(IMAGE_ROOT, "rootfs-flat");
 const PACK_DIST = path.join(IMAGE_ROOT, "pack-v3");
 
-// 41 MiB
-const MAX_PACK_SIZE = 41 * 1024 * 1024;
+// 16 MiB
+const MAX_PACK_SIZE = 16 * 1024 * 1024;
 
 async function pack() {
   await fs.mkdir(PACK_DIST);
@@ -27,9 +27,9 @@ async function pack() {
     const fileFullName = path.join(FS_BASE, fileName);
 
     const fileInfo = await fs.stat(fileFullName);
-    if (fileInfo.size > MAX_PACK_SIZE) {
-      throw new Error(fileName + " size is too large");
-    }
+    // if (fileInfo.size > MAX_PACK_SIZE) {
+    //   throw new Error(fileName + " size is too large " + fileInfo.size);
+    // }
 
     let packIndex = result.findIndex((it) => it.size + fileInfo.size < MAX_PACK_SIZE);
 
