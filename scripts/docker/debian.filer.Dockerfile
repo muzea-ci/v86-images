@@ -22,7 +22,10 @@ RUN apt update && \
 
 RUN echo "export TERM=xterm-256color" >> ~/.bashrc
 
-# RUN apt install -y python3 nano gcc make libc6-dev htop
+RUN apt install -y --no-install-recommends install python3 nano gcc make libc6-dev htop zsh git ca-certificates
+RUN CHSH=no sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)" || true && \
+  echo "DISABLE_AUTO_UPDATE=true" >> ~/.zshrc && \
+  sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="bira"/g' ~/.zshrc
 
 COPY networking.sh /root/
 
