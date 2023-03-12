@@ -41,6 +41,8 @@ tar -xvf "$OUT_ROOTFS_TAR" -C /tmp/v86
 extlinux --install /tmp/v86/boot/
 cp "$SYS_CFG" /tmp/v86/boot/syslinux.cfg
 
+echo "host9p      /mnt        9p      trans=virtio,version=9p2000.L,rw        0   0" >> /tmp/v86/etc/fstab
+
 dd if=/usr/lib/syslinux/mbr/mbr.bin of="$IMAGE_HDA" bs=440 count=1 conv=notrunc
 
 umount /tmp/v86
