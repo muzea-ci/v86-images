@@ -4,17 +4,9 @@ ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt update && \
   apt --yes --no-install-recommends install \
-  linux-image-686 grub2 systemd \
-  libterm-readline-perl-perl \
-  unzip bzip2 xz-utils \
-  libc-l10n locales \
-  strace file xterm vim apt-file \
-  dhcpcd5 \
-  wget curl \
-  net-tools netcat \
-  systemd-sysv && \
-  echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen \
-  locale-gen \
+  linux-image-686 systemd unzip bzip2 xz-utils \
+  vim dhcpcd5 wget curl net-tools systemd-sysv \
+  && \
   chsh -s /bin/bash && \
   echo "root:root" | chpasswd && \
   rm /etc/motd /etc/issue && \
@@ -22,7 +14,7 @@ RUN apt update && \
 
 RUN echo "export TERM=xterm-256color" >> ~/.bashrc
 
-RUN apt install -y --no-install-recommends python3 nano gcc make libc6-dev htop zsh git ca-certificates
+RUN apt install -y --no-install-recommends python3 nano gcc libc6-dev htop zsh git ca-certificates
 RUN CHSH=no sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)" || true && \
   echo "DISABLE_AUTO_UPDATE=true" >> ~/.zshrc && \
   sed -i 's/ZSH_THEME="robbyrussell"/ZSH_THEME="bira"/g' ~/.zshrc
@@ -44,6 +36,8 @@ COPY logind.conf /etc/systemd/logind.conf
 
 RUN printf '%s\n' 9p 9pnet 9pnet_virtio virtio virtio_ring virtio_pci | tee -a /etc/initramfs-tools/modules && \
   update-initramfs -u
+
+RUN apt purge ca-certificates git -y && apt autoremove -y
 
 RUN apt-get --yes clean && \
   rm -r /var/lib/apt/lists/* && \

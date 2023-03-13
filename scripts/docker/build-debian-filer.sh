@@ -18,7 +18,7 @@ docker export "$CONTAINER_NAME" -o "$OUT_ROOTFS_TAR"
 echo "$OUT_ROOTFS_TAR" created.
 
 
-IMG_SIZE=$(expr 512 \* 1024 \* 1024)
+IMG_SIZE=$(expr 600 \* 1024 \* 1024)
 dd if=/dev/zero of="$IMAGE_HDA" bs=${IMG_SIZE} count=1
 
 sfdisk "$IMAGE_HDA" <<EOF
@@ -27,7 +27,7 @@ label-id: 0x5d8b75fc
 device: new.img
 unit: sectors
 
-linux.img1 : start=2048, size=1046528, type=83, bootable
+linux.img1 : start=2048, size=1226752, type=83, bootable
 EOF
 
 
