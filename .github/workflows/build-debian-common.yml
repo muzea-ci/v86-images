@@ -1,4 +1,4 @@
-name: build-debian-hdd
+name: build-debian-common
 
 on:
   workflow_dispatch:
@@ -14,10 +14,12 @@ jobs:
       - name: Build image
         run: |
           sudo apt update && sudo apt install zstd extlinux -y
-          cd scripts/docker && sudo ./build-debian-filer.sh && cd ../../
+          cd scripts/docker && sudo ./build-debian-common.sh && cd ../../
+          node ./scripts/build-state.js --image debian-common --memory 512 && zstd -9 images/debian-common/state.bin -o images/debian-common/state.bin.zst
       - name: Release
         uses: actions/upload-artifact@v3
         with:
-          name: debian-10-hdd
+          name: debian-common
           path: |
-            images/debian-filer/linux.img.zstd
+            images/debian-common/linux.img.zst
+            images/debian-common/state.bin.zst

@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 set -veu
 
-IMAGES="$(dirname "$0")"/../../images/debian-filer
+IMAGES="$(dirname "$0")"/../../images/debian-common
 SYS_CFG="$(dirname "$0")"/syslinux.cfg
 OUT_ROOTFS_TAR="$IMAGES"/rootfs.tar
-CONTAINER_NAME=debian-filer
-IMAGE_NAME=i386/debian-filer
+CONTAINER_NAME=debian-common
+IMAGE_NAME=i386/debian-common
 IMAGE_HDA="$IMAGES"/linux.img
 
 mkdir -p "$IMAGES"
-docker build -f ./debian.filer.Dockerfile . --platform linux/386 --rm --tag "$IMAGE_NAME"
+docker build -f ./debian.common.Dockerfile . --platform linux/386 --rm --tag "$IMAGE_NAME"
 docker rm "$CONTAINER_NAME" || true
 docker create --platform linux/386 -t -i --name "$CONTAINER_NAME" "$IMAGE_NAME" bash
 
@@ -42,11 +42,12 @@ extlinux --install /tmp/v86/boot/
 cp "$SYS_CFG" /tmp/v86/boot/syslinux.cfg
 
 echo "host9p      /mnt        9p      trans=virtio,version=9p2000.L,rw        0   0" >> /tmp/v86/etc/fstab
+echo "nameserver 8.8.8.8" > /tmp/v86/etc/resolv.conf
 
 dd if=/usr/lib/syslinux/mbr/mbr.bin of="$IMAGE_HDA" bs=440 count=1 conv=notrunc
 
 umount /tmp/v86
 losetup -D
 
-zstd -9 "$IMAGE_HDA" -o "$IMAGES"/linux.img.zstd
+zstd -9 "$IMAGE_HDA" -o "$IMAGES"/linux.img.zst
 echo "$IMAGE_HDA" created.
