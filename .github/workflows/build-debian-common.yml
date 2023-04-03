@@ -14,6 +14,7 @@ jobs:
       - name: Build image
         run: |
           sudo apt update && sudo apt install zstd extlinux -y
+          yarn
           cd scripts/docker && sudo ./build-debian-common.sh && cd ../../
           node ./scripts/build-state.js --image debian-common --memory 512 && zstd -9 images/debian-common/state.bin -o images/debian-common/state.bin.zst
       - name: Release
