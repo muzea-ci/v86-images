@@ -1,4 +1,4 @@
-name: build-debian-common
+name: build-debian-python
 
 on:
   workflow_dispatch:
@@ -15,11 +15,11 @@ jobs:
         run: |
           sudo apt update && sudo apt install zstd extlinux -y
           yarn
-          cd scripts && sudo ./build-debian.sh --image debian-common --dockerfile debian.common.Dockerfile --size 600 --memory 512  && cd ../
+          cd scripts && sudo ./build-debian.sh --image debian-python --dockerfile debian.python.Dockerfile --size 450 --memory 256  && cd ../
       - name: Release
         uses: actions/upload-artifact@v3
         with:
-          name: debian-common
+          name: debian-python
           path: |
-            images/debian-common/linux.img.zst
-            images/debian-common/state.bin.zst
+            images/debian-python/linux.img.zst
+            images/debian-python/state.bin.zst
