@@ -50,7 +50,8 @@ echo "$OUT_ROOTFS_TAR" created.
 
 
 IMG_SIZE=$(expr ${SIZE} \* 1024 \* 1024)
-echo hdd size is $IMG_SIZE.
+SECTOR_SIZE=$(expr ${SIZE} \* 1024 \* 1024 \/ 512 \- 2048)
+echo hdd size is $IMG_SIZE $SECTOR_SIZE.
 dd if=/dev/zero of="$IMAGE_HDA" bs=${IMG_SIZE} count=1
 
 sfdisk "$IMAGE_HDA" <<EOF
@@ -59,7 +60,7 @@ label-id: 0x5d8b75fc
 device: new.img
 unit: sectors
 
-linux.img1 : start=2048, size=1226752, type=83, bootable
+linux.img1 : start=2048, size=${SECTOR_SIZE}, type=83, bootable
 EOF
 
 
