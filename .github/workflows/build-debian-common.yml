@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  common:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -15,8 +15,7 @@ jobs:
         run: |
           sudo apt update && sudo apt install zstd extlinux -y
           yarn
-          cd scripts/docker && sudo ./build-debian-common.sh && cd ../../
-          sudo node ./scripts/build-state.js --image debian-common --memory 512 && sudo zstd -9 images/debian-common/state.bin -o images/debian-common/state.bin.zst
+          cd scripts && sudo ./build-debian.sh --image debian-common --dockerfile debian.common.Dockerfile --size 600 --memory 512  && cd ../
       - name: Release
         uses: actions/upload-artifact@v3
         with:
@@ -24,3 +23,22 @@ jobs:
           path: |
             images/debian-common/linux.img.zst
             images/debian-common/state.bin.zst
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Build image
+        run: |
+          sudo apt update && sudo apt install zstd extlinux -y
+          yarn
+          cd scripts && sudo ./build-debian.sh --image debian-python --dockerfile debian.python.Dockerfile --size 450 --memory 256  && cd ../
+      - name: Release
+        uses: actions/upload-artifact@v3
+        with:
+          name: debian-python
+          path: |
+            images/debian-python/linux.img.zst
+            images/debian-python/state.bin.zst
